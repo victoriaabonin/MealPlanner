@@ -5,8 +5,10 @@ public enum UnitOfMeasurement
     Ml,
     L,
     Kg,
-    Mg,
+    Grams,
     Tbsp,
     Tsp,
-    Cups
+    Cups,
+    ToTaste,
+    Unit
 }
