@@ -1,6 +1,7 @@
 using Domain.Dtos;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
+using Domain.Models;
 
 namespace Application.Services;
 
@@ -28,5 +29,23 @@ public class IngredientsService : IIngredientsService
         }).ToList();
 
         return ingredientDtos;
+    }
+
+    public async Task<IngredientDto> AddIngredient(IngredientDto ingredientDto)
+    {
+        var ingredient = new Ingredient()
+        {
+            Name = ingredientDto.Name
+        };
+
+        var savedIngredient = await ingredientsRepository.AddIngredient(ingredient);
+
+        var savedIngredientDto = new IngredientDto()
+        {
+            Id = savedIngredient.Id,
+            Name = savedIngredient.Name
+        };
+
+        return savedIngredientDto;
     }
 }

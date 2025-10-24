@@ -1,0 +1,11 @@
+﻿@model Presentation.ViewModels.IngredientViewModel
+
+<form asp-controller="Ingredients" asp-action="Add" method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name"></span>
+    </div>
+
+    <button type="submit">Submit</button>
+</form>

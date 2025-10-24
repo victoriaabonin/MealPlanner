@@ -5,4 +5,6 @@ namespace Domain.Interfaces.Repositories;
 public interface IIngredientsRepository
 {
     Task<List<Ingredient>> GetIngredientsAsync();
+
+    Task<Ingredient> AddIngredient(Ingredient ingredient);
 }

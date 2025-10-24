@@ -1,4 +1,4 @@
-using Application.Services;
+using Domain.Dtos;
 using Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels;
@@ -30,6 +30,25 @@ namespace Presentation.Controllers
             }).ToList();
 
             return View(ingredientsViewModel);
+        }
+
+        public async Task<ActionResult> Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Add(IngredientViewModel ingredientViewModel)
+        {
+            var ingredientDto = new IngredientDto()
+            {
+                Name = ingredientViewModel.Name
+            };
+
+            await ingredientsService.AddIngredient(ingredientDto);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
