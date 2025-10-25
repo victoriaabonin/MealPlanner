@@ -10,7 +10,7 @@ public class IngredientsRepository : IIngredientsRepository
         return TempDataBase.Ingredients;
     }
 
-    public async Task<Ingredient> AddIngredient(Ingredient ingredient)
+    public async Task<Ingredient> AddIngredientAsync(Ingredient ingredient)
     {
         var ingredientsQuantity = TempDataBase.Ingredients.Count;
 

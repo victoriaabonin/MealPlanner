@@ -31,14 +31,14 @@ public class IngredientsService : IIngredientsService
         return ingredientDtos;
     }
 
-    public async Task<IngredientDto> AddIngredient(IngredientDto ingredientDto)
+    public async Task<IngredientDto> AddIngredientAsync(IngredientDto ingredientDto)
     {
         var ingredient = new Ingredient()
         {
             Name = ingredientDto.Name
         };
 
-        var savedIngredient = await ingredientsRepository.AddIngredient(ingredient);
+        var savedIngredient = await ingredientsRepository.AddIngredientAsync(ingredient);
 
         var savedIngredientDto = new IngredientDto()
         {

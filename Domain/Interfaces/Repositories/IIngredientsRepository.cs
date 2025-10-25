@@ -6,5 +6,5 @@ public interface IIngredientsRepository
 {
     Task<List<Ingredient>> GetIngredientsAsync();
 
-    Task<Ingredient> AddIngredient(Ingredient ingredient);
+    Task<Ingredient> AddIngredientAsync(Ingredient ingredient);
 }

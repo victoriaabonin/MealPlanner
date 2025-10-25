@@ -46,7 +46,7 @@ namespace Presentation.Controllers
                 Name = ingredientViewModel.Name
             };
 
-            await ingredientsService.AddIngredient(ingredientDto);
+            await ingredientsService.AddIngredientAsync(ingredientDto);
 
             return RedirectToAction(nameof(Index));
         }

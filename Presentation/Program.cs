@@ -10,6 +10,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IIngredientsRepository, IngredientsRepository>();
 builder.Services.AddTransient<IIngredientsService, IngredientsService>();
+builder.Services.AddTransient<IRecipesRepository, RecipesRepository>();
+builder.Services.AddTransient<IRecipesService, RecipesService>();
 
 var app = builder.Build();
 

@@ -6,5 +6,5 @@ public interface IIngredientsService
 {
     Task<List<IngredientDto>> GetIngredientsAsync();
 
-    Task<IngredientDto> AddIngredient(IngredientDto ingredientDto);
+    Task<IngredientDto> AddIngredientAsync(IngredientDto ingredientDto);
 }
