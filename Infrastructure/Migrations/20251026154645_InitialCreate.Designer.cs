@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MealPlannerDbContext))]
-    [Migration("20251025211125_InitialCreate")]
+    [Migration("20251026154645_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -29,6 +29,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UnitOfMeasurement")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("Ingredients");
@@ -44,9 +47,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<double>("Quantity")
                         .HasColumnType("REAL");
-
-                    b.Property<int>("UnitOfMeasurement")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("RecipeId", "IngredientId");
 

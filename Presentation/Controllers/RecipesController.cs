@@ -28,15 +28,46 @@ namespace Presentation.Controllers
                     IngredientViewModel = new IngredientViewModel()
                     {
                         Id = ingredientOfRecipeDto.IngredientDto.Id,
-                        Name = ingredientOfRecipeDto.IngredientDto.Name
+                        Name = ingredientOfRecipeDto.IngredientDto.Name,
+                        UnitOfMeasurement = ingredientOfRecipeDto.IngredientDto.UnitOfMeasurement
                     },
-                    Quantity = ingredientOfRecipeDto.Quantity,
-                    UnitOfMeasurement = ingredientOfRecipeDto.UnitOfMeasurement
+                    Quantity = ingredientOfRecipeDto.Quantity
                 }).ToList()
             }).ToList();
 
             return View(recipesViewModel);
         }
 
+        public async Task<ActionResult> Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Add(RecipeViewModel recipeViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(recipeViewModel);
+            }
+
+            var recipeDto = new RecipeDto()
+            {
+                Name = recipeViewModel.Name,
+                IngredientsOfRecipeDtos = recipeViewModel.IngredientsOfRecipesViewModels.Select(ingredientOfRecipeViewModel => new IngredientOfRecipeDto()
+                {
+                    IngredientDto = new IngredientDto()
+                    {
+                        Id = ingredientOfRecipeViewModel.IngredientViewModel.Id,
+                        Name = ingredientOfRecipeViewModel.IngredientViewModel.Name,
+                        UnitOfMeasurement = ingredientOfRecipeViewModel.IngredientViewModel.UnitOfMeasurement,
+                    },
+                    Quantity = ingredientOfRecipeViewModel.Quantity,
+                }).ToList()
+            };
+
+            return View();
+        }
     }
 }

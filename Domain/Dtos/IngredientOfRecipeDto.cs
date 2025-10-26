@@ -1,11 +1,10 @@
-using System;
-using Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Dtos;
 
 public class IngredientOfRecipeDto
 {
-    public IngredientDto IngredientDto { get; set; }
-    public UnitOfMeasurement UnitOfMeasurement { get; set; }
+    public IngredientDto IngredientDto { get; set; } = new IngredientDto();
+
     public double Quantity { get; set; }
 }

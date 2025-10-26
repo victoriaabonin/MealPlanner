@@ -26,10 +26,10 @@ public class RecipesService : IRecipesService
                 IngredientDto = new IngredientDto()
                 {
                     Id = ingredientRecipe.IngredientId,
-                    Name = ingredientRecipe.Ingredient.Name
+                    Name = ingredientRecipe.Ingredient.Name,
+                    UnitOfMeasurement = ingredientRecipe.Ingredient.UnitOfMeasurement
                 },
                 Quantity = ingredientRecipe.Quantity,
-                UnitOfMeasurement = ingredientRecipe.UnitOfMeasurement
             }).ToList()
         }).ToList();
 

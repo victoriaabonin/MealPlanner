@@ -16,7 +16,8 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    UnitOfMeasurement = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,7 +43,6 @@ namespace Infrastructure.Migrations
                 {
                     IngredientId = table.Column<int>(type: "INTEGER", nullable: false),
                     RecipeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UnitOfMeasurement = table.Column<int>(type: "INTEGER", nullable: false),
                     Quantity = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>

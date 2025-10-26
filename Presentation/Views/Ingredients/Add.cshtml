@@ -1,11 +1,20 @@
-﻿@model Presentation.ViewModels.IngredientViewModel
+﻿@using Domain.Enums
+@model Presentation.ViewModels.IngredientViewModel
 
 <form asp-controller="Ingredients" asp-action="Add" method="post">
-    <div class="form-group">
+
+    <div class="mb-3">
         <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control"/>
+        <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name"></span>
     </div>
 
+    <div class="mb-3">
+        <label asp-for="UnitOfMeasurement"></label>
+        <select asp-for="UnitOfMeasurement" asp-items="Html.GetEnumSelectList<UnitOfMeasurement>()" class="form-control"></select>
+        <span asp-validation-for="UnitOfMeasurement"></span>
+    </div>
+
     <button type="submit">Submit</button>
+
 </form>

@@ -22,8 +22,10 @@ public class IngredientsService : IIngredientsService
         {
             Id = ingredient.Id,
             Name = ingredient.Name,
-            RecipesDtos = ingredient.IngredientRecipes?.Select(ingredientRecipe => new RecipeDto()
+            UnitOfMeasurement = ingredient.UnitOfMeasurement,
+            RecipesDtos = ingredient.IngredientRecipes.Select(ingredientRecipe => new RecipeDto()
             {
+                Name = ingredientRecipe.Recipe.Name,
                 Id = ingredientRecipe.RecipeId
             }).ToList()
         }).ToList();
@@ -35,7 +37,8 @@ public class IngredientsService : IIngredientsService
     {
         var ingredient = new Ingredient()
         {
-            Name = ingredientDto.Name
+            Name = ingredientDto.Name,
+            UnitOfMeasurement = ingredientDto.UnitOfMeasurement
         };
 
         var savedIngredient = await ingredientsRepository.AddIngredientAsync(ingredient);
@@ -43,7 +46,8 @@ public class IngredientsService : IIngredientsService
         var savedIngredientDto = new IngredientDto()
         {
             Id = savedIngredient.Id,
-            Name = savedIngredient.Name
+            Name = savedIngredient.Name,
+            UnitOfMeasurement = savedIngredient.UnitOfMeasurement
         };
 
         return savedIngredientDto;

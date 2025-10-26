@@ -22,7 +22,8 @@ namespace Presentation.Controllers
             {
                 Id = ingredientDto.Id,
                 Name = ingredientDto.Name,
-                Recipes = ingredientDto.RecipesDtos?.Select(recipeDto => new RecipeViewModel()
+                UnitOfMeasurement = ingredientDto.UnitOfMeasurement,
+                Recipes = ingredientDto.RecipesDtos.Select(recipeDto => new RecipeViewModel()
                 {
                     Id = recipeDto.Id,
                     Name = recipeDto.Name
@@ -41,9 +42,15 @@ namespace Presentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Add(IngredientViewModel ingredientViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(ingredientViewModel);
+            }
+
             var ingredientDto = new IngredientDto()
             {
-                Name = ingredientViewModel.Name
+                Name = ingredientViewModel.Name,
+                UnitOfMeasurement = ingredientViewModel.UnitOfMeasurement
             };
 
             await ingredientsService.AddIngredientAsync(ingredientDto);
