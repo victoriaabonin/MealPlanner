@@ -8,7 +8,7 @@ public class Recipe
     public int Id { get; set; }
 
     [Required]
-    [RegularExpression(@"^.+\S.*$", ErrorMessage = "Name cannot be empty or whitespace")]
+    [MinLength(1)]
     public string Name { get; set; } = string.Empty;
 
     public List<IngredientRecipe> IngredientRecipes { get; set; } = [];
