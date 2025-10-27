@@ -8,10 +8,10 @@ https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=ne
 ## Migrations
 
 ### Generate migration
-dotnet ef migrations add InitialCreate --startup-project ../Presentation
+dotnet ef migrations add InitialCreate --startup-project ../Api
 
 ### Update database
-dotnet ef database update --startup-project ../Presentation
+dotnet ef database update --startup-project ../Api
 
 ## .Net tag helper
 https://learn.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/?view=aspnetcore-9.0&source=recommendations

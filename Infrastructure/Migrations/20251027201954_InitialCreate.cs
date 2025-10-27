@@ -66,6 +66,18 @@ namespace Infrastructure.Migrations
                 name: "IX_IngredientRecipes_IngredientId",
                 table: "IngredientRecipes",
                 column: "IngredientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ingredients_Name",
+                table: "Ingredients",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Recipes_Name",
+                table: "Recipes",
+                column: "Name",
+                unique: true);
         }
 
         /// <inheritdoc />

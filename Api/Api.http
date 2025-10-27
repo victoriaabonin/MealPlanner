@@ -4,3 +4,13 @@ GET {{Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+GET {{Api_HostAddress}}/api/ingredients
+
+###
+POST {{Api_HostAddress}}/api/ingredients/add
+Content-Type: application/json
+
+{
+  "name": "Pasta",
+  "unitOfMeasurement": "Grams"
+}

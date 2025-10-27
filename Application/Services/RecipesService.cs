@@ -21,7 +21,7 @@ public class RecipesService : IRecipesService
         {
             Id = recipe.Id,
             Name = recipe.Name,
-            IngredientsOfRecipeDtos = recipe.IngredientRecipes.Select(ingredientRecipe => new IngredientOfRecipeDto()
+            IngredientsOfRecipesDtos = recipe.IngredientRecipes.Select(ingredientRecipe => new IngredientOfRecipeDto()
             {
                 IngredientDto = new IngredientDto()
                 {

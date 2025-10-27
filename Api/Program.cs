@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Application.Services;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
@@ -15,8 +16,12 @@ builder.Services.AddTransient<IRecipesRepository, RecipesRepository>();
 builder.Services.AddTransient<IRecipesService, RecipesService>();
 
 var configuration = builder.Configuration;
-builder.Services.AddDbContext<MealPlannerDbContext>(options =>
-    options.UseSqlite(configuration.GetConnectionString("SQLiteConnection")));
+builder.Services.AddDbContext<MealPlannerDbContext>(options => options.UseSqlite(configuration.GetConnectionString("SQLiteConnection")));
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+    {   
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

@@ -15,6 +15,9 @@ public class MealPlannerDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<IngredientRecipe>().HasKey(ur => new { ur.RecipeId, ur.IngredientId });
+        base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(MealPlannerDbContext).Assembly);
     }
 }
