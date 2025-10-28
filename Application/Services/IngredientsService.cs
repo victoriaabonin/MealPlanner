@@ -9,9 +9,12 @@ public class IngredientsService : IIngredientsService
 {
     private readonly IIngredientsRepository ingredientsRepository;
 
-    public IngredientsService(IIngredientsRepository ingredientsRepository)
+    private readonly IRecipesRepository recipesRepository;
+
+    public IngredientsService(IIngredientsRepository ingredientsRepository, IRecipesRepository recipesRepository)
     {
         this.ingredientsRepository = ingredientsRepository;
+        this.recipesRepository = recipesRepository;
     }
 
     public async Task<List<IngredientDto>> GetIngredientsAsync()
@@ -23,7 +26,7 @@ public class IngredientsService : IIngredientsService
             Id = ingredient.Id,
             Name = ingredient.Name,
             UnitOfMeasurement = ingredient.UnitOfMeasurement,
-            RecipesDtos = ingredient.IngredientRecipes.Select(ingredientRecipe => new RecipeDto()
+            RecipesDtos = ingredient.RecipeIngredients.Select(ingredientRecipe => new RecipeDto()
             {
                 Name = ingredientRecipe.Recipe.Name,
                 Id = ingredientRecipe.RecipeId
@@ -41,15 +44,28 @@ public class IngredientsService : IIngredientsService
             UnitOfMeasurement = ingredientDto.UnitOfMeasurement
         };
 
-        var savedIngredient = await ingredientsRepository.AddIngredientAsync(ingredient);
+        await ingredientsRepository.AddIngredientAsync(ingredient);
 
-        var savedIngredientDto = new IngredientDto()
+        ingredientDto.Id = ingredient.Id;
+
+        return ingredientDto;
+    }
+
+    public async Task<List<IngredientOfRecipeDto>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds)
+    {
+        var recipes = await recipesRepository.GetRecipesAsync(recipeIds);
+
+        var IngredientsOfRecipesAggregated = recipes
+        .SelectMany(x => x.RecipeIngredients)
+        .GroupBy(x => x.Ingredient)
+        .Select(x => new IngredientOfRecipeDto()
         {
-            Id = savedIngredient.Id,
-            Name = savedIngredient.Name,
-            UnitOfMeasurement = savedIngredient.UnitOfMeasurement
-        };
+            Id = x.First().Ingredient.Id,
+            Name = x.First().Ingredient.Name,
+            UnitOfMeasurement = x.First().Ingredient.UnitOfMeasurement,
+            Quantity = x.Sum(x => x.Quantity)
+        }).ToList();
 
-        return savedIngredientDto;
+        return IngredientsOfRecipesAggregated;
     }
 }

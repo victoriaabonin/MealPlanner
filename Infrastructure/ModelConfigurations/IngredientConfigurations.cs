@@ -9,12 +9,15 @@ public class IngredientConfigurations : IEntityTypeConfiguration<Ingredient>
 {
     public void Configure(EntityTypeBuilder<Ingredient> builder)
 {
-        builder.HasKey(ingredient => ingredient.Id);
+        builder.HasKey(x => x.Id);
 
-        builder.HasIndex(ingredient => ingredient.Name)
+        builder.HasIndex(x => x.Name)
             .IsUnique();
 
-        builder.Property(ingredient => ingredient.Name)
+        builder.Property(x => x.Name)
+            .IsRequired();
+
+        builder.Property(x => x.UnitOfMeasurement)
             .IsRequired();
     }
 }

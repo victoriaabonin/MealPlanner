@@ -1,19 +1,42 @@
 using Domain.Dtos;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
+using Domain.Models;
 
 namespace Application.Services;
 
 public class RecipesService : IRecipesService
 {
     private readonly IRecipesRepository recipesRepository;
+    private readonly IRecipeIngredientRepository recipeIngredientRepository;
 
-    public RecipesService(IRecipesRepository recipesRepository)
+    public RecipesService(IRecipesRepository recipesRepository, IRecipeIngredientRepository recipeIngredientRepository)
     {
         this.recipesRepository = recipesRepository;
+        this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
-    public async Task<List<RecipeDto>> GetRecipeAsync()
+    public async Task<RecipeDto> GetRecipesByIdAsync(int id)
+    {
+        var recipe = await recipesRepository.GetRecipeByIdAsync(id);
+
+        var recipeDto = new RecipeDto()
+        {
+            Id = recipe.Id,
+            Name = recipe.Name,
+            Ingredients = recipe.RecipeIngredients.Select(x => new IngredientOfRecipeDto()
+            {
+                Id = x.Ingredient.Id,
+                Name = x.Ingredient.Name,
+                UnitOfMeasurement = x.Ingredient.UnitOfMeasurement,
+                Quantity = x.Quantity
+            }).ToList()
+        };
+
+        return recipeDto;
+    }
+
+    public async Task<List<RecipeDto>> GetRecipesAsync()
     {
         var recipes = await recipesRepository.GetRecipesAsync();
 
@@ -21,18 +44,58 @@ public class RecipesService : IRecipesService
         {
             Id = recipe.Id,
             Name = recipe.Name,
-            IngredientsOfRecipesDtos = recipe.IngredientRecipes.Select(ingredientRecipe => new IngredientOfRecipeDto()
+            Ingredients = recipe.RecipeIngredients.Select(x => new IngredientOfRecipeDto()
             {
-                IngredientDto = new IngredientDto()
-                {
-                    Id = ingredientRecipe.IngredientId,
-                    Name = ingredientRecipe.Ingredient.Name,
-                    UnitOfMeasurement = ingredientRecipe.Ingredient.UnitOfMeasurement
-                },
-                Quantity = ingredientRecipe.Quantity,
+                Id = x.Ingredient.Id,
+                Name = x.Ingredient.Name,
+                UnitOfMeasurement = x.Ingredient.UnitOfMeasurement,
+                Quantity = x.Quantity,
             }).ToList()
         }).ToList();
 
         return recipesDtos;
+    }
+
+    public async Task<RecipeDto> AddRecipeAsync(RecipeDto recipeDto)
+    {
+        var recipe = new Recipe()
+        {
+            Name = recipeDto.Name
+        };
+
+        await recipesRepository.AddRecipeAsync(recipe);
+
+        recipeDto.Id = recipe.Id;
+
+        return recipeDto;
+    }
+
+    public async Task<RecipeDto> AddIngredientAsync(AddIngredientToRecipeDto addIngredientToRecipeDto)
+    {
+        var recipeIngredient = new RecipeIngredient()
+        {
+            IngredientId = addIngredientToRecipeDto.IngredientId,
+            RecipeId = addIngredientToRecipeDto.RecipeId,
+            Quantity = addIngredientToRecipeDto.Quantity
+        };
+
+        await recipeIngredientRepository.AddIngredientRecipeAsync(recipeIngredient);
+
+        var recipe = await recipesRepository.GetRecipeByIdAsync(addIngredientToRecipeDto.RecipeId);
+
+        var recipeDto = new RecipeDto()
+        {
+            Id = recipe.Id,
+            Name = recipe.Name,
+            Ingredients = recipe.RecipeIngredients.Select(x => new IngredientOfRecipeDto()
+            {
+                Id = x.Ingredient.Id,
+                Name = x.Ingredient.Name,
+                UnitOfMeasurement = x.Ingredient.UnitOfMeasurement,
+                Quantity = x.Quantity,
+            }).ToList()
+        };
+
+        return recipeDto;
     }
 }

@@ -5,10 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.ModelConfigurations;
 
-public class IngredientRecipeConfigurations : IEntityTypeConfiguration<IngredientRecipe>
+public class IngredientRecipeConfigurations : IEntityTypeConfiguration<RecipeIngredient>
 {
-    public void Configure(EntityTypeBuilder<IngredientRecipe> builder)
+    public void Configure(EntityTypeBuilder<RecipeIngredient> builder)
     {
-        builder.HasKey(ur => new { ur.RecipeId, ur.IngredientId });
+        builder.HasKey(x => new { x.RecipeId, x.IngredientId });
+
+        builder.Property(x => x.Quantity)
+            .IsRequired();
     }
 }

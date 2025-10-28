@@ -1,0 +1,15 @@
+meta {
+  name: Get ingredients of recipes aggregated
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:5260/api/ingredients/recipes?recipeIds=1,2,3
+  body: none
+  auth: none
+}
+
+params:query {
+  recipeIds: 1,2,3
+}

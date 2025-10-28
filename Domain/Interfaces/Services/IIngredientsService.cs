@@ -7,4 +7,6 @@ public interface IIngredientsService
     Task<List<IngredientDto>> GetIngredientsAsync();
 
     Task<IngredientDto> AddIngredientAsync(IngredientDto ingredientDto);
+ 
+    Task<List<IngredientOfRecipeDto>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds);
 }

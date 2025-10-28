@@ -7,7 +7,7 @@ public class MealPlannerDbContext : DbContext
 {
     public DbSet<Ingredient> Ingredients { get; set; }
     public DbSet<Recipe> Recipes { get; set; }
-    public DbSet<IngredientRecipe> IngredientRecipes { get; set; }
+    public DbSet<RecipeIngredient> IngredientRecipes { get; set; }
 
     public MealPlannerDbContext(DbContextOptions<MealPlannerDbContext> options) : base(options)
     {

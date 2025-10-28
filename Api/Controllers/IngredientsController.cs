@@ -17,28 +17,39 @@ namespace Api.Controllers
             this.ingredientsService = ingredientsService;
         }
 
-        public async Task<ActionResult<List<IngredientResponseModel>>> Get()
+        [HttpGet]
+        public async Task<ActionResult<List<IngredientResponseModel>>> GetIngredients()
         {
             var ingredientsDtos = await ingredientsService.GetIngredientsAsync();
 
-            var ingredientsResponseModels = ingredientsDtos.Select(ingredientDto => new IngredientResponseModel()
+            var ingredientsResponseModels = ingredientsDtos.Select(x => new IngredientResponseModel()
             {
-                Id = ingredientDto.Id,
-                Name = ingredientDto.Name,
-                UnitOfMeasurement = ingredientDto.UnitOfMeasurement,
-                RecipesResponseModels = ingredientDto.RecipesDtos.Select(recipeDto => new RecipeResponseModel()
-                {
-                    Id = recipeDto.Id,
-                    Name = recipeDto.Name
-                }).ToList()
+                Id = x.Id,
+                Name = x.Name,
+                UnitOfMeasurement = x.UnitOfMeasurement
             });
 
             return Ok(ingredientsResponseModels);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<IngredientOfRecipeResponseModel>>> GetIngredientsFromListOfRecipes(int[] recipeIds)
+        {
+            var result = await ingredientsService.GetIngredientsOfRecipesAggregatedAsync(recipeIds);
+
+            var aggregatedIngredients = result.Select(x => new IngredientOfRecipeResponseModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                UnitOfMeasurement = x.UnitOfMeasurement,
+                Quantity = x.Quantity
+            }).ToList();
+
+            return Ok(aggregatedIngredients);
+        }
+
         [HttpPost]
-        [Route("[action]")]
-        public async Task<ActionResult<IngredientResponseModel>> Add(IngredientRequestModel ingredientRequestModel)
+        public async Task<ActionResult<IngredientResponseModel>> AddIngredient(IngredientRequestModel ingredientRequestModel)
         {
             var ingredientDto = new IngredientDto()
             {

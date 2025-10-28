@@ -8,5 +8,5 @@ public class Recipe
     
     public string Name { get; set; } = string.Empty;
 
-    public List<IngredientRecipe> IngredientRecipes { get; set; } = [];
+    public List<RecipeIngredient> RecipeIngredients { get; set; } = [];
 }

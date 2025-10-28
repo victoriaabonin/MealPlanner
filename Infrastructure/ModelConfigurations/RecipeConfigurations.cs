@@ -9,12 +9,12 @@ public class RecipeConfigurations: IEntityTypeConfiguration<Recipe>
 {
     public void Configure(EntityTypeBuilder<Recipe> builder)
 {
-        builder.HasKey(recipe => recipe.Id);
+        builder.HasKey(x => x.Id);
 
-        builder.HasIndex(recipe => recipe.Name)
+        builder.HasIndex(x => x.Name)
             .IsUnique();
 
-        builder.Property(recipe => recipe.Name)
+        builder.Property(x => x.Name)
             .IsRequired();
     }
 }
