@@ -4,6 +4,14 @@ meta {
   seq: 1
 }
 
-get {
-  url: 
+post {
+  url: http://localhost:5260/api/recipes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "name": "Risotto"
+  }
 }

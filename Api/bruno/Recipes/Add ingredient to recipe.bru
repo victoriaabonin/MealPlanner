@@ -4,6 +4,16 @@ meta {
   seq: 1
 }
 
-get {
-  url: 
+post {
+  url: http://localhost:5260/api/recipes/addIngredient
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "recipeId": 1,
+      "ingredientId": 1,
+      "quantity": 500
+  }
 }
