@@ -33,7 +33,8 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<IngredientOfRecipeResponseModel>>> GetIngredientsFromListOfRecipes(int[] recipeIds)
+        [Route("fromRecipes")]
+        public async Task<ActionResult<List<IngredientOfRecipeResponseModel>>> GetIngredientsFromRecipes([FromQuery] int[] recipeIds)
         {
             var result = await ingredientsService.GetIngredientsOfRecipesAggregatedAsync(recipeIds);
 

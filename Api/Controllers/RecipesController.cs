@@ -32,7 +32,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [Route(":id")]
+        [Route("{id}")]
         public async Task<ActionResult<RecipeResponseModel>> GetRecipeById(int id)
         {
             var recipeDto = await recipesService.GetRecipesByIdAsync(id);
