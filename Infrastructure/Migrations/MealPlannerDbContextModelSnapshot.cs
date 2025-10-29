@@ -70,7 +70,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("IngredientRecipes");
+                    b.ToTable("RecipeIngredient");
                 });
 
             modelBuilder.Entity("Domain.Models.RecipeIngredient", b =>

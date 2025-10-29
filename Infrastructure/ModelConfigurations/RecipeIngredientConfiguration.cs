@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.ModelConfigurations;
 
-public class IngredientRecipeConfigurations : IEntityTypeConfiguration<RecipeIngredient>
+public class RecipeIngredientConfiguration : IEntityTypeConfiguration<RecipeIngredient>
 {
     public void Configure(EntityTypeBuilder<RecipeIngredient> builder)
     {

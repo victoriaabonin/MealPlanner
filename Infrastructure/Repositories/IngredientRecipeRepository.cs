@@ -12,10 +12,12 @@ public class IngredientRecipesRepository : IRecipeIngredientRepository
         this.mealPlannerDbContext = mealPlannerDbContext;
     }
 
-    public async Task<RecipeIngredient> AddIngredientRecipeAsync(RecipeIngredient ingredientRecipe)
+    public async Task<RecipeIngredient> AddIngredientRecipeAsync(RecipeIngredient recipeIngredient)
     {
-        await mealPlannerDbContext.IngredientRecipes.AddAsync(ingredientRecipe);
+        await mealPlannerDbContext.RecipeIngredient.AddAsync(recipeIngredient);
+        
+        await mealPlannerDbContext.SaveChangesAsync();
 
-        return ingredientRecipe;
+        return recipeIngredient;
     }
 }

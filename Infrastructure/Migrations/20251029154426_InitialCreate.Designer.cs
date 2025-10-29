@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MealPlannerDbContext))]
-    [Migration("20251028203017_InitialCreate")]
+    [Migration("20251029154426_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -73,7 +73,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("IngredientRecipes");
+                    b.ToTable("RecipeIngredient");
                 });
 
             modelBuilder.Entity("Domain.Models.RecipeIngredient", b =>

@@ -38,7 +38,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IngredientRecipes",
+                name: "RecipeIngredient",
                 columns: table => new
                 {
                     IngredientId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -47,15 +47,15 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IngredientRecipes", x => new { x.RecipeId, x.IngredientId });
+                    table.PrimaryKey("PK_RecipeIngredient", x => new { x.RecipeId, x.IngredientId });
                     table.ForeignKey(
-                        name: "FK_IngredientRecipes_Ingredients_IngredientId",
+                        name: "FK_RecipeIngredient_Ingredients_IngredientId",
                         column: x => x.IngredientId,
                         principalTable: "Ingredients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_IngredientRecipes_Recipes_RecipeId",
+                        name: "FK_RecipeIngredient_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
@@ -63,15 +63,15 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_IngredientRecipes_IngredientId",
-                table: "IngredientRecipes",
-                column: "IngredientId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Ingredients_Name",
                 table: "Ingredients",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeIngredient_IngredientId",
+                table: "RecipeIngredient",
+                column: "IngredientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recipes_Name",
@@ -84,7 +84,7 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "IngredientRecipes");
+                name: "RecipeIngredient");
 
             migrationBuilder.DropTable(
                 name: "Ingredients");
