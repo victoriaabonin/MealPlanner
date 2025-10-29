@@ -28,7 +28,11 @@ public class RecipesRepository : IRecipesRepository
 
     public async Task<List<Recipe>> GetRecipesAsync(int[] ids)
     {
-        return await mealPlannerDbContext.Recipes.Where(x => ids.Contains(x.Id)).ToListAsync();
+        return await mealPlannerDbContext.Recipes
+        .Include(x => x.RecipeIngredients)
+            .ThenInclude(x => x.Ingredient)
+        .Where(x => ids.Contains(x.Id))
+        .ToListAsync();
     }
 
     public async Task<Recipe> AddRecipeAsync(Recipe recipe)
