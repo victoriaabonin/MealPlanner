@@ -17,7 +17,7 @@ builder.Services.AddTransient<IRecipesService, RecipesService>();
 builder.Services.AddTransient<IRecipeIngredientRepository, IngredientRecipesRepository>();
 
 var configuration = builder.Configuration;
-builder.Services.AddDbContext<MealPlannerDbContext>(options => options.UseSqlite(configuration.GetConnectionString("SQLiteConnection")));
+builder.Services.AddDbContext<MealPlannerDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers().AddJsonOptions(options =>
     {   
