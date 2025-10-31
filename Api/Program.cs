@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
+using Api.Middlewares;
 using Application.Services;
+using Domain.Exceptions;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
 using Infrastructure;
@@ -9,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddTransient<IIngredientsRepository, IngredientsRepository>();
 builder.Services.AddTransient<IIngredientsService, IngredientsService>();
@@ -29,6 +34,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

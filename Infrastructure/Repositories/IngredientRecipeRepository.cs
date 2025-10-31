@@ -1,5 +1,8 @@
+using Domain.Exceptions;
 using Domain.Interfaces.Repositories;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Infrastructure.Repositories;
 
@@ -14,10 +17,20 @@ public class IngredientRecipesRepository : IRecipeIngredientRepository
 
     public async Task<RecipeIngredient> AddIngredientRecipeAsync(RecipeIngredient recipeIngredient)
     {
-        await mealPlannerDbContext.RecipeIngredient.AddAsync(recipeIngredient);
-        
-        await mealPlannerDbContext.SaveChangesAsync();
+        try
+        {
+            await mealPlannerDbContext.RecipeIngredient.AddAsync(recipeIngredient);
+            await mealPlannerDbContext.SaveChangesAsync();
+            return recipeIngredient;
+        }
+        catch (DbUpdateException exception) when (exception.InnerException is PostgresException postgresException)
+        {
+            if (postgresException.SqlState == "23505")
+            {
+                throw new EntityAlreadyExistsException("The ingredient for this recipe is already registered");
+            }
 
-        return recipeIngredient;
+            throw postgresException;
+        }
     }
 }
