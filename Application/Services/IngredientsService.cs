@@ -4,7 +4,6 @@ using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
 using Domain.Models;
 using Domain.ResultPattern;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Services;
 
