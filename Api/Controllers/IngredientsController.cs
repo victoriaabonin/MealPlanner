@@ -79,16 +79,7 @@ namespace Api.Controllers
                 return BadRequest(result.Error!.Description);
             }
 
-            ingredientDto = result.Value!;
-
-            var ingredientResponseModel = new IngredientResponseModel()
-            {
-                Id = ingredientDto.Id,
-                Name = ingredientDto.Name,
-                UnitOfMeasurement = ingredientDto.UnitOfMeasurement
-            };
-
-            return Ok(ingredientResponseModel);
+            return Created();
         }
     }
 }

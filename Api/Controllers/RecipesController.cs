@@ -82,15 +82,7 @@ namespace Api.Controllers
                 return BadRequest(result.Error!.Description);
             }
 
-            recipeDto = result.Value!;
-
-            var recipeResponseModel = new RecipeResponseModel()
-            {
-                Id = recipeDto.Id,
-                Name = recipeDto.Name
-            };
-
-            return Ok(recipeResponseModel);
+            return Created();
         }
 
         [HttpPost]
@@ -111,22 +103,7 @@ namespace Api.Controllers
                 return BadRequest(result.Error!.Description);
             }
 
-            var recipeDto = result.Value!;
-
-            var recipeResponseModel = new RecipeResponseModel()
-            {
-                Id = recipeDto.Id,
-                Name = recipeDto.Name,
-                Ingredients = recipeDto.Ingredients.Select(x => new IngredientOfRecipeResponseModel()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    UnitOfMeasurement = x.UnitOfMeasurement,
-                    Quantity = x.Quantity
-                }).ToList()
-            };
-
-            return Ok(recipeResponseModel);
+            return Created();
         }
     }
 }
