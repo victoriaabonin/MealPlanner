@@ -1,4 +1,4 @@
-using Domain.Exceptions;
+using Domain.Exceptions.Database;
 using Domain.Interfaces.Repositories;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +27,7 @@ public class IngredientRecipesRepository : IRecipeIngredientRepository
         {
             if (postgresException.SqlState == "23505")
             {
-                throw new EntityAlreadyExistsException("The ingredient for this recipe is already registered");
+                throw new EntityAlreadyExistsException();
             }
 
             throw postgresException;

@@ -31,3 +31,7 @@ In case you're wondering, what is Bruno?
 Bruno is an api client that is awesome for testing your api, it's git friendly :)
 
 https://www.usebruno.com/
+
+## Result pattern
+
+https://medium.com/@aseem2372005/the-result-pattern-in-c-a-smarter-way-to-handle-errors-c6dee28a0ef0

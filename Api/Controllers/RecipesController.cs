@@ -20,9 +20,16 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<List<SimpleRecipeResponseModel>>> GetRecipesAsync()
         {
-            var recipesDtos = await recipesService.GetRecipesAsync();
+            var result = await recipesService.GetRecipesAsync();
 
-            var recipesResponseModel = recipesDtos.Select(x => new SimpleRecipeResponseModel()
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            var recipeDto = result.Value!;
+
+            var recipesResponseModel = recipeDto.Select(x => new SimpleRecipeResponseModel()
             {
                 Id = x.Id,
                 Name = x.Name
@@ -35,7 +42,14 @@ namespace Api.Controllers
         [Route("{id}")]
         public async Task<ActionResult<RecipeResponseModel>> GetRecipeById(int id)
         {
-            var recipeDto = await recipesService.GetRecipesByIdAsync(id);
+            var result = await recipesService.GetRecipesByIdAsync(id);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            var recipeDto = result.Value!;
 
             var recipeResponseModel = new RecipeResponseModel()
             {
@@ -63,10 +77,17 @@ namespace Api.Controllers
 
             var result = await recipesService.AddRecipeAsync(recipeDto);
 
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            recipeDto = result.Value!;
+
             var recipeResponseModel = new RecipeResponseModel()
             {
-                Id = result.Id,
-                Name = result.Name
+                Id = recipeDto.Id,
+                Name = recipeDto.Name
             };
 
             return Ok(recipeResponseModel);
@@ -85,11 +106,18 @@ namespace Api.Controllers
 
             var result = await recipesService.AddIngredientAsync(addIngredientToRecipeDto);
 
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            var recipeDto = result.Value!;
+
             var recipeResponseModel = new RecipeResponseModel()
             {
-                Id = result.Id,
-                Name = result.Name,
-                Ingredients = result.Ingredients.Select(x => new IngredientOfRecipeResponseModel()
+                Id = recipeDto.Id,
+                Name = recipeDto.Name,
+                Ingredients = recipeDto.Ingredients.Select(x => new IngredientOfRecipeResponseModel()
                 {
                     Id = x.Id,
                     Name = x.Name,

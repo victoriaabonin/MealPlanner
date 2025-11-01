@@ -20,7 +20,14 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<List<IngredientResponseModel>>> GetIngredients()
         {
-            var ingredientsDtos = await ingredientsService.GetIngredientsAsync();
+            var result = await ingredientsService.GetIngredientsAsync();
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            var ingredientsDtos = result.Value!;
 
             var ingredientsResponseModels = ingredientsDtos.Select(x => new IngredientResponseModel()
             {
@@ -38,7 +45,14 @@ namespace Api.Controllers
         {
             var result = await ingredientsService.GetIngredientsOfRecipesAggregatedAsync(recipeIds);
 
-            var aggregatedIngredients = result.Select(x => new IngredientOfRecipeResponseModel()
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            var ingredientRecipeDtos = result.Value!;
+
+            var aggregatedIngredients = ingredientRecipeDtos.Select(x => new IngredientOfRecipeResponseModel()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -60,11 +74,18 @@ namespace Api.Controllers
 
             var result = await ingredientsService.AddIngredientAsync(ingredientDto);
 
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            ingredientDto = result.Value!;
+
             var ingredientResponseModel = new IngredientResponseModel()
             {
-                Id = result.Id,
-                Name = result.Name,
-                UnitOfMeasurement = result.UnitOfMeasurement
+                Id = ingredientDto.Id,
+                Name = ingredientDto.Name,
+                UnitOfMeasurement = ingredientDto.UnitOfMeasurement
             };
 
             return Ok(ingredientResponseModel);

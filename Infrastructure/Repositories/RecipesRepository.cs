@@ -1,4 +1,4 @@
-using Domain.Exceptions;
+using Domain.Exceptions.Database;
 using Domain.Interfaces.Repositories;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +17,17 @@ public class RecipesRepository : IRecipesRepository
 
     public async Task<Recipe> GetRecipeByIdAsync(int id)
     {
-        return await mealPlannerDbContext.Recipes
+        var recipe = await mealPlannerDbContext.Recipes
             .Include(x => x.RecipeIngredients)
                 .ThenInclude(x => x.Ingredient)
             .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (recipe is null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        return recipe;
     }
 
     public async Task<List<Recipe>> GetRecipesAsync()
@@ -49,7 +56,7 @@ public class RecipesRepository : IRecipesRepository
         {
             if (postgresException.SqlState == "23505")
             {
-                throw new EntityAlreadyExistsException("A recipe with this name is already registered");
+                throw new EntityAlreadyExistsException();
             }
 
             throw postgresException;

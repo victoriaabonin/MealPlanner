@@ -1,7 +1,10 @@
+using Application.Mappers;
 using Domain.Dtos;
+using Domain.Exceptions.Database;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
 using Domain.Models;
+using Domain.ResultPattern;
 
 namespace Application.Services;
 
@@ -16,86 +19,74 @@ public class RecipesService : IRecipesService
         this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
-    public async Task<RecipeDto> GetRecipesByIdAsync(int id)
+    public async Task<Result<RecipeDto>> GetRecipesByIdAsync(int id)
     {
-        var recipe = await recipesRepository.GetRecipeByIdAsync(id);
-
-        var recipeDto = new RecipeDto()
+        try
         {
-            Id = recipe.Id,
-            Name = recipe.Name,
-            Ingredients = recipe.RecipeIngredients.Select(x => new IngredientOfRecipeDto()
-            {
-                Id = x.Ingredient.Id,
-                Name = x.Ingredient.Name,
-                UnitOfMeasurement = x.Ingredient.UnitOfMeasurement,
-                Quantity = x.Quantity
-            }).ToList()
-        };
+            var recipe = await recipesRepository.GetRecipeByIdAsync(id);
 
-        return recipeDto;
+            var recipeDto = RecipeMapper.MapToRecipeDto(recipe);
+
+            return recipeDto;
+        }
+        catch (EntityNotFoundException)
+        {
+            return Errors.RecipeNotFound;
+        }
     }
 
-    public async Task<List<RecipeDto>> GetRecipesAsync()
+    public async Task<Result<List<RecipeDto>>> GetRecipesAsync()
     {
         var recipes = await recipesRepository.GetRecipesAsync();
 
-        var recipesDtos = recipes.Select(recipe => new RecipeDto()
-        {
-            Id = recipe.Id,
-            Name = recipe.Name,
-            Ingredients = recipe.RecipeIngredients.Select(x => new IngredientOfRecipeDto()
-            {
-                Id = x.Ingredient.Id,
-                Name = x.Ingredient.Name,
-                UnitOfMeasurement = x.Ingredient.UnitOfMeasurement,
-                Quantity = x.Quantity,
-            }).ToList()
-        }).ToList();
+        var recipesDtos = recipes.Select(recipe => RecipeMapper.MapToRecipeDto(recipe)).ToList();
 
         return recipesDtos;
     }
 
-    public async Task<RecipeDto> AddRecipeAsync(RecipeDto recipeDto)
+    public async Task<Result<RecipeDto>> AddRecipeAsync(RecipeDto recipeDto)
     {
-        var recipe = new Recipe()
+        try
         {
-            Name = recipeDto.Name
-        };
+            var recipe = new Recipe()
+            {
+                Name = recipeDto.Name
+            };
 
-        await recipesRepository.AddRecipeAsync(recipe);
+            await recipesRepository.AddRecipeAsync(recipe);
 
-        recipeDto.Id = recipe.Id;
+            recipeDto.Id = recipe.Id;
 
-        return recipeDto;
+            return recipeDto;
+        }
+        catch (EntityAlreadyExistsException)
+        {
+            return Errors.RecipeAlreadyExists;
+        }
     }
 
-    public async Task<RecipeDto> AddIngredientAsync(AddIngredientToRecipeDto addIngredientToRecipeDto)
+    public async Task<Result<RecipeDto>> AddIngredientAsync(AddIngredientToRecipeDto addIngredientToRecipeDto)
     {
-        var recipeIngredient = new RecipeIngredient()
+        try
         {
-            IngredientId = addIngredientToRecipeDto.IngredientId,
-            RecipeId = addIngredientToRecipeDto.RecipeId,
-            Quantity = addIngredientToRecipeDto.Quantity
-        };
-
-        await recipeIngredientRepository.AddIngredientRecipeAsync(recipeIngredient);
-
-        var recipe = await recipesRepository.GetRecipeByIdAsync(addIngredientToRecipeDto.RecipeId);
-
-        var recipeDto = new RecipeDto()
-        {
-            Id = recipe.Id,
-            Name = recipe.Name,
-            Ingredients = recipe.RecipeIngredients.Select(x => new IngredientOfRecipeDto()
+            var recipeIngredient = new RecipeIngredient()
             {
-                Id = x.Ingredient.Id,
-                Name = x.Ingredient.Name,
-                UnitOfMeasurement = x.Ingredient.UnitOfMeasurement,
-                Quantity = x.Quantity,
-            }).ToList()
-        };
+                IngredientId = addIngredientToRecipeDto.IngredientId,
+                RecipeId = addIngredientToRecipeDto.RecipeId,
+                Quantity = addIngredientToRecipeDto.Quantity
+            };
 
-        return recipeDto;
+            await recipeIngredientRepository.AddIngredientRecipeAsync(recipeIngredient);
+
+            var recipe = await recipesRepository.GetRecipeByIdAsync(addIngredientToRecipeDto.RecipeId);
+
+            var recipeDto = RecipeMapper.MapToRecipeDto(recipe);
+
+            return recipeDto;
+        }
+        catch (EntityAlreadyExistsException)
+        {
+            return Errors.RecipeIngredientAlreadyExists;
+        }
     }
 }

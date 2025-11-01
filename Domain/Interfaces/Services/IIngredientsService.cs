@@ -1,12 +1,13 @@
 using Domain.Dtos;
+using Domain.ResultPattern;
 
 namespace Domain.Interfaces.Services;
 
 public interface IIngredientsService
 {
-    Task<List<IngredientDto>> GetIngredientsAsync();
+    Task<Result<List<IngredientDto>>> GetIngredientsAsync();
 
-    Task<IngredientDto> AddIngredientAsync(IngredientDto ingredientDto);
+    Task<Result<IngredientDto>> AddIngredientAsync(IngredientDto ingredientDto);
  
-    Task<List<IngredientOfRecipeDto>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds);
+    Task<Result<List<IngredientOfRecipeDto>>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds);
 }

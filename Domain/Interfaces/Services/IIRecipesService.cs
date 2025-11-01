@@ -1,15 +1,16 @@
 using System;
 using Domain.Dtos;
+using Domain.ResultPattern;
 
 namespace Domain.Interfaces.Services;
 
 public interface IRecipesService
 {
-    Task<RecipeDto> GetRecipesByIdAsync(int id);
+    Task<Result<RecipeDto>> GetRecipesByIdAsync(int id);
 
-    Task<List<RecipeDto>> GetRecipesAsync();
+    Task<Result<List<RecipeDto>>> GetRecipesAsync();
 
-    Task<RecipeDto> AddRecipeAsync(RecipeDto recipeDto);
+    Task<Result<RecipeDto>> AddRecipeAsync(RecipeDto recipeDto);
 
-    Task<RecipeDto> AddIngredientAsync(AddIngredientToRecipeDto addIngredientToRecipeDto);
+    Task<Result<RecipeDto>> AddIngredientAsync(AddIngredientToRecipeDto addIngredientToRecipeDto);
 }

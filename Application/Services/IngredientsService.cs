@@ -1,23 +1,28 @@
 using Domain.Dtos;
+using Domain.Exceptions.Database;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
 using Domain.Models;
+using Domain.ResultPattern;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Services;
 
 public class IngredientsService : IIngredientsService
 {
     private readonly IIngredientsRepository ingredientsRepository;
-
     private readonly IRecipesRepository recipesRepository;
 
-    public IngredientsService(IIngredientsRepository ingredientsRepository, IRecipesRepository recipesRepository)
+    public IngredientsService(
+        IIngredientsRepository ingredientsRepository,
+        IRecipesRepository recipesRepository
+        )
     {
         this.ingredientsRepository = ingredientsRepository;
         this.recipesRepository = recipesRepository;
     }
 
-    public async Task<List<IngredientDto>> GetIngredientsAsync()
+    public async Task<Result<List<IngredientDto>>> GetIngredientsAsync()
     {
         var ingredients = await ingredientsRepository.GetIngredientsAsync();
 
@@ -28,30 +33,37 @@ public class IngredientsService : IIngredientsService
             UnitOfMeasurement = ingredient.UnitOfMeasurement,
             RecipesDtos = ingredient.RecipeIngredients.Select(ingredientRecipe => new RecipeDto()
             {
-                Name = ingredientRecipe.Recipe.Name,
-                Id = ingredientRecipe.RecipeId
+                Name = ingredientRecipe.Recipe!.Name,
+                Id = ingredientRecipe.Recipe!.Id
             }).ToList()
         }).ToList();
 
         return ingredientDtos;
     }
 
-    public async Task<IngredientDto> AddIngredientAsync(IngredientDto ingredientDto)
+    public async Task<Result<IngredientDto>> AddIngredientAsync(IngredientDto ingredientDto)
     {
-        var ingredient = new Ingredient()
+        try
         {
-            Name = ingredientDto.Name,
-            UnitOfMeasurement = ingredientDto.UnitOfMeasurement
-        };
+            var ingredient = new Ingredient()
+            {
+                Name = ingredientDto.Name,
+                UnitOfMeasurement = ingredientDto.UnitOfMeasurement
+            };
 
-        await ingredientsRepository.AddIngredientAsync(ingredient);
+            await ingredientsRepository.AddIngredientAsync(ingredient);
 
-        ingredientDto.Id = ingredient.Id;
+            ingredientDto.Id = ingredient.Id;
 
-        return ingredientDto;
+            return ingredientDto;
+        }
+        catch (EntityAlreadyExistsException)
+        {
+            return Errors.IngredientAlreadyExists;
+        }
     }
 
-    public async Task<List<IngredientOfRecipeDto>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds)
+    public async Task<Result<List<IngredientOfRecipeDto>>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds)
     {
         var recipes = await recipesRepository.GetRecipesAsync(recipeIds);
 
@@ -60,9 +72,9 @@ public class IngredientsService : IIngredientsService
         .GroupBy(x => x.Ingredient)
         .Select(x => new IngredientOfRecipeDto()
         {
-            Id = x.First().Ingredient.Id,
-            Name = x.First().Ingredient.Name,
-            UnitOfMeasurement = x.First().Ingredient.UnitOfMeasurement,
+            Id = x.First().Ingredient!.Id,
+            Name = x.First().Ingredient!.Name,
+            UnitOfMeasurement = x.First().Ingredient!.UnitOfMeasurement,
             Quantity = x.Sum(x => x.Quantity)
         }).ToList();
 
