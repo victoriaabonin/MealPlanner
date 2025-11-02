@@ -30,13 +30,13 @@ public class IngredientServiceTests
 
         var mockIngredientsRepository = new Mock<IIngredientsRepository>();
 
-        mockIngredientsRepository.Setup(x => x.GetIngredientsAsync()).ReturnsAsync(ingredients);
+        mockIngredientsRepository.Setup(x => x.GetIngredientsAsync(CancellationToken.None)).ReturnsAsync(ingredients);
 
         var mockRecipesRepository = new Mock<IRecipesRepository>();
 
         var service = new IngredientsService(mockIngredientsRepository.Object, mockRecipesRepository.Object);
 
-        var result = await service.GetIngredientsAsync();
+        var result = await service.GetIngredientsAsync(CancellationToken.None);
 
         var expectedResult = new List<IngredientDto>()
         {

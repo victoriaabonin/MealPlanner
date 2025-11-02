@@ -19,11 +19,11 @@ public class RecipesService : IRecipesService
         this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
-    public async Task<Result<RecipeDto>> GetRecipesByIdAsync(int id)
+    public async Task<Result<RecipeDto>> GetRecipesByIdAsync(int id, CancellationToken cancellationToken)
     {
         try
         {
-            var recipe = await recipesRepository.GetRecipeByIdAsync(id);
+            var recipe = await recipesRepository.GetRecipeByIdAsync(id, cancellationToken);
 
             var recipeDto = RecipeMapper.MapToRecipeDto(recipe);
 
@@ -35,16 +35,16 @@ public class RecipesService : IRecipesService
         }
     }
 
-    public async Task<Result<List<RecipeDto>>> GetRecipesAsync()
+    public async Task<Result<List<RecipeDto>>> GetRecipesAsync(CancellationToken cancellationToken)
     {
-        var recipes = await recipesRepository.GetRecipesAsync();
+        var recipes = await recipesRepository.GetRecipesAsync(cancellationToken);
 
         var recipesDtos = recipes.Select(recipe => RecipeMapper.MapToRecipeDto(recipe)).ToList();
 
         return recipesDtos;
     }
 
-    public async Task<Result<RecipeDto>> AddRecipeAsync(RecipeDto recipeDto)
+    public async Task<Result<RecipeDto>> AddRecipeAsync(RecipeDto recipeDto, CancellationToken cancellationToken)
     {
         try
         {
@@ -53,7 +53,7 @@ public class RecipesService : IRecipesService
                 Name = recipeDto.Name
             };
 
-            await recipesRepository.AddRecipeAsync(recipe);
+            await recipesRepository.AddRecipeAsync(recipe, cancellationToken);
 
             recipeDto.Id = recipe.Id;
 
@@ -65,7 +65,7 @@ public class RecipesService : IRecipesService
         }
     }
 
-    public async Task<Result<RecipeDto>> AddIngredientAsync(AddIngredientToRecipeDto addIngredientToRecipeDto)
+    public async Task<Result<RecipeDto>> AddIngredientAsync(AddIngredientToRecipeDto addIngredientToRecipeDto, CancellationToken cancellationToken)
     {
         try
         {
@@ -76,9 +76,9 @@ public class RecipesService : IRecipesService
                 Quantity = addIngredientToRecipeDto.Quantity
             };
 
-            await recipeIngredientRepository.AddIngredientRecipeAsync(recipeIngredient);
+            await recipeIngredientRepository.AddIngredientRecipeAsync(recipeIngredient, cancellationToken);
 
-            var recipe = await recipesRepository.GetRecipeByIdAsync(addIngredientToRecipeDto.RecipeId);
+            var recipe = await recipesRepository.GetRecipeByIdAsync(addIngredientToRecipeDto.RecipeId, cancellationToken);
 
             var recipeDto = RecipeMapper.MapToRecipeDto(recipe);
 

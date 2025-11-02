@@ -5,9 +5,9 @@ namespace Domain.Interfaces.Services;
 
 public interface IIngredientsService
 {
-    Task<Result<List<IngredientDto>>> GetIngredientsAsync();
+    Task<Result<List<IngredientDto>>> GetIngredientsAsync(CancellationToken cancellationToken);
 
-    Task<Result<IngredientDto>> AddIngredientAsync(IngredientDto ingredientDto);
+    Task<Result<IngredientDto>> AddIngredientAsync(IngredientDto ingredientDto, CancellationToken cancellationToken);
  
-    Task<Result<List<IngredientOfRecipeDto>>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds);
+    Task<Result<List<IngredientOfRecipeDto>>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds, CancellationToken cancellationToken);
 }

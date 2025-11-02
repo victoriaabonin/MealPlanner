@@ -15,17 +15,17 @@ public class IngredientsRepository : IIngredientsRepository
         this.mealPlannerDbContext = mealPlannerDbContext;
     }
 
-    public async Task<List<Ingredient>> GetIngredientsAsync()
+    public async Task<List<Ingredient>> GetIngredientsAsync(CancellationToken cancellationToken)
     {
-        return await mealPlannerDbContext.Ingredients.ToListAsync();
+        return await mealPlannerDbContext.Ingredients.ToListAsync(cancellationToken);
     }
 
-    public async Task<Ingredient> AddIngredientAsync(Ingredient ingredient)
+    public async Task<Ingredient> AddIngredientAsync(Ingredient ingredient, CancellationToken cancellationToken)
     {
         try
         {
-            await mealPlannerDbContext.Ingredients.AddAsync(ingredient);
-            await mealPlannerDbContext.SaveChangesAsync();
+            await mealPlannerDbContext.Ingredients.AddAsync(ingredient, cancellationToken);
+            await mealPlannerDbContext.SaveChangesAsync(cancellationToken);
             return ingredient;
         }
         catch (DbUpdateException exception) when (exception.InnerException is PostgresException postgresException)

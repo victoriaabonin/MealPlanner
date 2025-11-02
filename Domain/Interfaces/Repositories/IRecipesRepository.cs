@@ -4,11 +4,11 @@ namespace Domain.Interfaces.Repositories;
 
 public interface IRecipesRepository
 {
-    Task<Recipe> GetRecipeByIdAsync(int id);
+    Task<Recipe> GetRecipeByIdAsync(int id, CancellationToken cancellationToken);
 
-    Task<List<Recipe>> GetRecipesAsync();
+    Task<List<Recipe>> GetRecipesAsync(CancellationToken cancellationToken);
 
-    Task<List<Recipe>> GetRecipesAsync(int[] ids);
+    Task<List<Recipe>> GetRecipesAsync(int[] ids, CancellationToken cancellationToken);
     
-    Task<Recipe> AddRecipeAsync(Recipe recipe);
+    Task<Recipe> AddRecipeAsync(Recipe recipe, CancellationToken cancellationToken);
 }

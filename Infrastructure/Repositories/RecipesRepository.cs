@@ -15,12 +15,12 @@ public class RecipesRepository : IRecipesRepository
         this.mealPlannerDbContext = mealPlannerDbContext;
     }
 
-    public async Task<Recipe> GetRecipeByIdAsync(int id)
+    public async Task<Recipe> GetRecipeByIdAsync(int id, CancellationToken cancellationToken)
     {
         var recipe = await mealPlannerDbContext.Recipes
             .Include(x => x.RecipeIngredients)
                 .ThenInclude(x => x.Ingredient)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (recipe is null)
         {
@@ -30,26 +30,26 @@ public class RecipesRepository : IRecipesRepository
         return recipe;
     }
 
-    public async Task<List<Recipe>> GetRecipesAsync()
+    public async Task<List<Recipe>> GetRecipesAsync(CancellationToken cancellationToken)
     {
-        return await mealPlannerDbContext.Recipes.ToListAsync();
+        return await mealPlannerDbContext.Recipes.ToListAsync(cancellationToken);
     }
 
-    public async Task<List<Recipe>> GetRecipesAsync(int[] ids)
+    public async Task<List<Recipe>> GetRecipesAsync(int[] ids, CancellationToken cancellationToken)
     {
         return await mealPlannerDbContext.Recipes
         .Include(x => x.RecipeIngredients)
             .ThenInclude(x => x.Ingredient)
         .Where(x => ids.Contains(x.Id))
-        .ToListAsync();
+        .ToListAsync(cancellationToken);
     }
 
-    public async Task<Recipe> AddRecipeAsync(Recipe recipe)
+    public async Task<Recipe> AddRecipeAsync(Recipe recipe, CancellationToken cancellationToken)
     {
         try
         {
-            await mealPlannerDbContext.Recipes.AddAsync(recipe);
-            await mealPlannerDbContext.SaveChangesAsync();
+            await mealPlannerDbContext.Recipes.AddAsync(recipe, cancellationToken);
+            await mealPlannerDbContext.SaveChangesAsync(cancellationToken);
             return recipe;
         }
         catch (DbUpdateException exception) when (exception.InnerException is PostgresException postgresException)

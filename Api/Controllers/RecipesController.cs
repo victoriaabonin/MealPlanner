@@ -18,9 +18,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<SimpleRecipeResponseModel>>> GetRecipesAsync()
+        public async Task<ActionResult<List<SimpleRecipeResponseModel>>> GetRecipesAsync(CancellationToken cancellationToken)
         {
-            var result = await recipesService.GetRecipesAsync();
+            var result = await recipesService.GetRecipesAsync(cancellationToken);
 
             if (result.IsFailure)
             {
@@ -40,9 +40,9 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<RecipeResponseModel>> GetRecipeById(int id)
+        public async Task<ActionResult<RecipeResponseModel>> GetRecipeById(int id, CancellationToken cancellationToken)
         {
-            var result = await recipesService.GetRecipesByIdAsync(id);
+            var result = await recipesService.GetRecipesByIdAsync(id, cancellationToken);
 
             if (result.IsFailure)
             {
@@ -68,14 +68,14 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<RecipeResponseModel>>> AddRecipe(RecipeRequestModel requestModel)
+        public async Task<ActionResult<List<RecipeResponseModel>>> AddRecipe(RecipeRequestModel requestModel, CancellationToken cancellationToken)
         {
             var recipeDto = new RecipeDto()
             {
                 Name = requestModel.Name
             };
 
-            var result = await recipesService.AddRecipeAsync(recipeDto);
+            var result = await recipesService.AddRecipeAsync(recipeDto, cancellationToken);
 
             if (result.IsFailure)
             {
@@ -87,7 +87,7 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("addIngredient")]
-        public async Task<ActionResult<RecipeResponseModel>> AddIngredient(AddIngredientToRecipeRequestModel requestModel)
+        public async Task<ActionResult<RecipeResponseModel>> AddIngredient(AddIngredientToRecipeRequestModel requestModel, CancellationToken cancellationToken)
         {
             var addIngredientToRecipeDto = new AddIngredientToRecipeDto()
             {
@@ -96,7 +96,7 @@ namespace Api.Controllers
                 Quantity = requestModel.Quantity
             };
 
-            var result = await recipesService.AddIngredientAsync(addIngredientToRecipeDto);
+            var result = await recipesService.AddIngredientAsync(addIngredientToRecipeDto, cancellationToken);
 
             if (result.IsFailure)
             {

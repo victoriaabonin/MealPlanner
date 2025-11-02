@@ -15,12 +15,12 @@ public class IngredientRecipesRepository : IRecipeIngredientRepository
         this.mealPlannerDbContext = mealPlannerDbContext;
     }
 
-    public async Task<RecipeIngredient> AddIngredientRecipeAsync(RecipeIngredient recipeIngredient)
+    public async Task<RecipeIngredient> AddIngredientRecipeAsync(RecipeIngredient recipeIngredient, CancellationToken cancellationToken)
     {
         try
         {
-            await mealPlannerDbContext.RecipeIngredient.AddAsync(recipeIngredient);
-            await mealPlannerDbContext.SaveChangesAsync();
+            await mealPlannerDbContext.RecipeIngredient.AddAsync(recipeIngredient, cancellationToken);
+            await mealPlannerDbContext.SaveChangesAsync(cancellationToken);
             return recipeIngredient;
         }
         catch (DbUpdateException exception) when (exception.InnerException is PostgresException postgresException)

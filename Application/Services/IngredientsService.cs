@@ -21,9 +21,9 @@ public class IngredientsService : IIngredientsService
         this.recipesRepository = recipesRepository;
     }
 
-    public async Task<Result<List<IngredientDto>>> GetIngredientsAsync()
+    public async Task<Result<List<IngredientDto>>> GetIngredientsAsync(CancellationToken cancellationToken)
     {
-        var ingredients = await ingredientsRepository.GetIngredientsAsync();
+        var ingredients = await ingredientsRepository.GetIngredientsAsync(cancellationToken);
 
         var ingredientDtos = ingredients.Select(ingredient => new IngredientDto()
         {
@@ -40,7 +40,7 @@ public class IngredientsService : IIngredientsService
         return ingredientDtos;
     }
 
-    public async Task<Result<IngredientDto>> AddIngredientAsync(IngredientDto ingredientDto)
+    public async Task<Result<IngredientDto>> AddIngredientAsync(IngredientDto ingredientDto, CancellationToken cancellationToken)
     {
         try
         {
@@ -50,7 +50,7 @@ public class IngredientsService : IIngredientsService
                 UnitOfMeasurement = ingredientDto.UnitOfMeasurement
             };
 
-            await ingredientsRepository.AddIngredientAsync(ingredient);
+            await ingredientsRepository.AddIngredientAsync(ingredient, cancellationToken);
 
             ingredientDto.Id = ingredient.Id;
 
@@ -62,9 +62,9 @@ public class IngredientsService : IIngredientsService
         }
     }
 
-    public async Task<Result<List<IngredientOfRecipeDto>>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds)
+    public async Task<Result<List<IngredientOfRecipeDto>>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds, CancellationToken cancellationToken)
     {
-        var recipes = await recipesRepository.GetRecipesAsync(recipeIds);
+        var recipes = await recipesRepository.GetRecipesAsync(recipeIds, cancellationToken);
 
         var IngredientsOfRecipesAggregated = recipes
         .SelectMany(x => x.RecipeIngredients)

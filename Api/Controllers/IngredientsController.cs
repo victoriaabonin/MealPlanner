@@ -18,9 +18,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<IngredientResponseModel>>> GetIngredients()
+        public async Task<ActionResult<List<IngredientResponseModel>>> GetIngredients(CancellationToken cancellationToken)
         {
-            var result = await ingredientsService.GetIngredientsAsync();
+            var result = await ingredientsService.GetIngredientsAsync(cancellationToken);
 
             if (result.IsFailure)
             {
@@ -41,9 +41,9 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("fromRecipes")]
-        public async Task<ActionResult<List<IngredientOfRecipeResponseModel>>> GetIngredientsFromRecipes([FromQuery] int[] recipeIds)
+        public async Task<ActionResult<List<IngredientOfRecipeResponseModel>>> GetIngredientsFromRecipes([FromQuery] int[] recipeIds, CancellationToken cancellationToken)
         {
-            var result = await ingredientsService.GetIngredientsOfRecipesAggregatedAsync(recipeIds);
+            var result = await ingredientsService.GetIngredientsOfRecipesAggregatedAsync(recipeIds, cancellationToken);
 
             if (result.IsFailure)
             {
@@ -64,7 +64,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IngredientResponseModel>> AddIngredient(IngredientRequestModel ingredientRequestModel)
+        public async Task<ActionResult<IngredientResponseModel>> AddIngredient(IngredientRequestModel ingredientRequestModel, CancellationToken cancellationToken)
         {
             var ingredientDto = new IngredientDto()
             {
@@ -72,7 +72,7 @@ namespace Api.Controllers
                 UnitOfMeasurement = ingredientRequestModel.UnitOfMeasurement
             };
 
-            var result = await ingredientsService.AddIngredientAsync(ingredientDto);
+            var result = await ingredientsService.AddIngredientAsync(ingredientDto, cancellationToken);
 
             if (result.IsFailure)
             {
