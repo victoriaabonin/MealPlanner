@@ -1,6 +1,8 @@
-# MealPlanner
+# Meal Planner Api
 
-This is a project to help me generate a groceries list depending on the recipes I want to make during the week
+This is the backend of the project
+
+The prokect is a tool to help me generate a groceries list depending on the recipes I want to make during the week
 
 ## Postgres
 
