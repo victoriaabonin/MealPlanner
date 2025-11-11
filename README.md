@@ -18,13 +18,17 @@ Do you want a nice and easy docker UI? check this TUI out https://github.com/jes
 
 ## Migrations
 
+Install dotnet ef tool
+
+`dotnet tool install --global dotnet-ef`
+
 ### Generate migration
 
-dotnet ef migrations add InitialCreate --startup-project ../Api
+`dotnet ef migrations add InitialCreate --startup-project ../Api`
 
 ### Update database
 
-dotnet ef database update --startup-project ../Api
+`dotnet ef database update --startup-project ../Api`
 
 ## Bruno
 

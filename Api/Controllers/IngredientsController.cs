@@ -81,5 +81,25 @@ namespace Api.Controllers
 
             return Created();
         }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateIngredient(IngredientRequestModel ingredientRequestModel, CancellationToken cancellationToken)
+        {
+            var ingredientDto = new IngredientDto()
+            {
+                Id = ingredientRequestModel.Id,
+                Name = ingredientRequestModel.Name,
+                UnitOfMeasurement = ingredientRequestModel.UnitOfMeasurement
+            };
+
+            var result = await ingredientsService.UpdateIngredientAsync(ingredientDto, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            return NoContent();
+        }
     }
 }

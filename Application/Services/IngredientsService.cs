@@ -79,4 +79,34 @@ public class IngredientsService : IIngredientsService
 
         return IngredientsOfRecipesAggregated;
     }
+
+    public async Task<Result<IngredientDto>> UpdateIngredientAsync(IngredientDto ingredientDto, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (ingredientDto.Id == 0)
+            {
+                return Errors.MissingPropertyId;
+            }
+
+            var ingredient = new Ingredient()
+            {
+                Id = ingredientDto.Id,
+                Name = ingredientDto.Name,
+                UnitOfMeasurement = ingredientDto.UnitOfMeasurement
+            };
+
+            await ingredientsRepository.UpdateIngredientAsync(ingredient, cancellationToken);
+
+            return ingredientDto;
+        }
+        catch (EntityAlreadyExistsException)
+        {
+            return Errors.IngredientAlreadyExists;
+        }
+        catch (EntityNotFoundException)
+        {
+            return Errors.IngredientNotFound;
+        }
+    }
 }

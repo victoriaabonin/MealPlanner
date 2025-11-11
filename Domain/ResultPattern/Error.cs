@@ -11,11 +11,13 @@ public static class Errors
     public static Error RecipeIngredientAlreadyExists { get; } = new(ErrorType.EntityAlreadyExists, "The recipe already has the given ingredient");
     public static Error RecipeNotFound { get; } = new(ErrorType.EntityNotFound, "A recipe with the given query was not found");
     public static Error IngredientNotFound { get; } = new(ErrorType.EntityNotFound, "An Ingredient with the given query was not found");
+    public static Error MissingPropertyId { get; } = new(ErrorType.RequiredPropertyMissing, "The property Id is missing");
 
 }
 
 public enum ErrorType
 {
     EntityAlreadyExists,
-    EntityNotFound
+    EntityNotFound,
+    RequiredPropertyMissing
 }

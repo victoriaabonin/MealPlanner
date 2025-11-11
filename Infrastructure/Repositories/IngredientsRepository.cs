@@ -38,4 +38,34 @@ public class IngredientsRepository : IIngredientsRepository
             throw postgresException;
         }
     }
+
+    public async Task<Ingredient> UpdateIngredientAsync(Ingredient ingredient, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var existingIngredient = await mealPlannerDbContext.Ingredients.FirstOrDefaultAsync(x => x.Id == ingredient.Id, cancellationToken);
+
+            if (existingIngredient is null)
+            {
+                throw new EntityNotFoundException();
+            }
+
+            existingIngredient.Name = ingredient.Name;
+            existingIngredient.UnitOfMeasurement = ingredient.UnitOfMeasurement;
+
+            mealPlannerDbContext.Ingredients.Update(ingredient);
+            await mealPlannerDbContext.SaveChangesAsync(cancellationToken);
+
+            return ingredient;
+        }
+        catch (DbUpdateException exception) when (exception.InnerException is PostgresException postgresException)
+        {
+            if (postgresException.SqlState == "23505")
+            {
+                throw new EntityAlreadyExistsException();
+            }
+
+            throw postgresException;
+        }
+    }
 }

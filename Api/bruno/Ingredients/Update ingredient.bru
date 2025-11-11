@@ -1,0 +1,19 @@
+meta {
+  name: Update ingredient
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:5260/api/ingredients
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 1,
+    "name": "Rice",
+    "unitOfMeasurement": "Gram"
+  }
+}
