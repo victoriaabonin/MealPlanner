@@ -18,6 +18,29 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<IngredientResponseModel>> GetIngredientById(int id, CancellationToken cancellationToken)
+        {
+            var result = await ingredientsService.GetIngredientByIdAsync(id, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            var ingredientDto = result.Value!;
+
+            var ingredientResponseModel = new IngredientResponseModel()
+            {
+                Id = ingredientDto.Id,
+                Name = ingredientDto.Name,
+                UnitOfMeasurement = ingredientDto.UnitOfMeasurement
+            };
+
+            return Ok(ingredientResponseModel);
+        }
+
+        [HttpGet]
         public async Task<ActionResult<List<IngredientResponseModel>>> GetIngredients(CancellationToken cancellationToken)
         {
             var result = await ingredientsService.GetIngredientsAsync(cancellationToken);

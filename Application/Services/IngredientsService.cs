@@ -109,4 +109,25 @@ public class IngredientsService : IIngredientsService
             return Errors.IngredientNotFound;
         }
     }
+
+    public async Task<Result<IngredientDto>> GetIngredientByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var ingredient = await ingredientsRepository.GetIngredientByIdAsync(id, cancellationToken);
+
+            var ingredientDto = new IngredientDto()
+            {
+                Id = ingredient.Id,
+                Name = ingredient.Name,
+                UnitOfMeasurement = ingredient.UnitOfMeasurement
+            };
+
+            return ingredientDto;
+        }
+        catch (EntityNotFoundException)
+        {
+            return Errors.IngredientNotFound;
+        }
+    }
 }

@@ -53,7 +53,7 @@ public class IngredientsRepository : IIngredientsRepository
             existingIngredient.Name = ingredient.Name;
             existingIngredient.UnitOfMeasurement = ingredient.UnitOfMeasurement;
 
-            mealPlannerDbContext.Ingredients.Update(ingredient);
+            mealPlannerDbContext.Ingredients.Update(existingIngredient);
             await mealPlannerDbContext.SaveChangesAsync(cancellationToken);
 
             return ingredient;
@@ -67,5 +67,18 @@ public class IngredientsRepository : IIngredientsRepository
 
             throw postgresException;
         }
+    }
+
+    public async Task<Ingredient> GetIngredientByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        var ingredient = await mealPlannerDbContext.Ingredients
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (ingredient is null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        return ingredient;
     }
 }
