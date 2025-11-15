@@ -105,5 +105,24 @@ namespace Api.Controllers
 
             return Created();
         }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateRecipe(RecipeRequestModel recipeRequestModel, CancellationToken cancellationToken)
+        {
+            var recipeDto = new RecipeDto()
+            {
+                Id = recipeRequestModel.Id,
+                Name = recipeRequestModel.Name
+            };
+
+            var result = await recipesService.UpdateRecipeAsync(recipeDto, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            return NoContent();
+        }
     }
 }

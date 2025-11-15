@@ -89,4 +89,33 @@ public class RecipesService : IRecipesService
             return Errors.RecipeIngredientAlreadyExists;
         }
     }
+
+    public async Task<Result<RecipeDto>> UpdateRecipeAsync(RecipeDto recipeDto, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (recipeDto.Id == 0)
+            {
+                return Errors.MissingPropertyId;
+            }
+
+            var ingredient = new Recipe()
+            {
+                Id = recipeDto.Id,
+                Name = recipeDto.Name
+            };
+
+            await recipesRepository.UpdateRecipeAsync(ingredient, cancellationToken);
+
+            return recipeDto;
+        }
+        catch (EntityAlreadyExistsException)
+        {
+            return Errors.RecipeAlreadyExists;
+        }
+        catch (EntityNotFoundException)
+        {
+            return Errors.RecipeNotFound;
+        }
+    }
 }

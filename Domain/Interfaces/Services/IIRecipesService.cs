@@ -1,4 +1,3 @@
-using System;
 using Domain.Dtos;
 using Domain.ResultPattern;
 
@@ -13,4 +12,6 @@ public interface IRecipesService
     Task<Result<RecipeDto>> AddRecipeAsync(RecipeDto recipeDto, CancellationToken cancellationToken);
 
     Task<Result<RecipeDto>> AddIngredientAsync(AddIngredientToRecipeDto addIngredientToRecipeDto, CancellationToken cancellationToken);
+
+    Task<Result<RecipeDto>> UpdateRecipeAsync(RecipeDto recipeDto, CancellationToken cancellationToken);
 }

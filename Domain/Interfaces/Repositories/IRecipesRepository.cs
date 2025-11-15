@@ -9,6 +9,8 @@ public interface IRecipesRepository
     Task<List<Recipe>> GetRecipesAsync(CancellationToken cancellationToken);
 
     Task<List<Recipe>> GetRecipesAsync(int[] ids, CancellationToken cancellationToken);
-    
+
     Task<Recipe> AddRecipeAsync(Recipe recipe, CancellationToken cancellationToken);
+    
+    Task<Recipe> UpdateRecipeAsync(Recipe recipe, CancellationToken cancellationToken);
 }

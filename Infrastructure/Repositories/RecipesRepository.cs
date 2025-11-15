@@ -62,4 +62,33 @@ public class RecipesRepository : IRecipesRepository
             throw postgresException;
         }
     }
+
+    public async Task<Recipe> UpdateRecipeAsync(Recipe recipe, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var existingRecipe = await mealPlannerDbContext.Recipes.FirstOrDefaultAsync(x => x.Id == recipe.Id, cancellationToken);
+
+            if (existingRecipe is null)
+            {
+                throw new EntityNotFoundException();
+            }
+
+            existingRecipe.Name = recipe.Name;
+
+            mealPlannerDbContext.Recipes.Update(existingRecipe);
+            await mealPlannerDbContext.SaveChangesAsync(cancellationToken);
+
+            return recipe;
+        }
+        catch (DbUpdateException exception) when (exception.InnerException is PostgresException postgresException)
+        {
+            if (postgresException.SqlState == "23505")
+            {
+                throw new EntityAlreadyExistsException();
+            }
+
+            throw postgresException;
+        }
+    }
 }
