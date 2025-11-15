@@ -62,30 +62,6 @@ namespace Api.Controllers
             return Ok(ingredientsResponseModels);
         }
 
-        [HttpGet]
-        [Route("fromRecipes")]
-        public async Task<ActionResult<List<IngredientOfRecipeResponseModel>>> GetIngredientsFromRecipes([FromQuery] int[] recipeIds, CancellationToken cancellationToken)
-        {
-            var result = await ingredientsService.GetIngredientsOfRecipesAggregatedAsync(recipeIds, cancellationToken);
-
-            if (result.IsFailure)
-            {
-                return BadRequest(result.Error!.Description);
-            }
-
-            var ingredientRecipeDtos = result.Value!;
-
-            var aggregatedIngredients = ingredientRecipeDtos.Select(x => new IngredientOfRecipeResponseModel()
-            {
-                Id = x.Id,
-                Name = x.Name,
-                UnitOfMeasurement = x.UnitOfMeasurement,
-                Quantity = x.Quantity
-            }).ToList();
-
-            return Ok(aggregatedIngredients);
-        }
-
         [HttpPost]
         public async Task<ActionResult<IngredientResponseModel>> AddIngredient(IngredientRequestModel ingredientRequestModel, CancellationToken cancellationToken)
         {

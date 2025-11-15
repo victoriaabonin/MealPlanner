@@ -11,10 +11,12 @@ namespace Api.Controllers
     public class RecipesController : ControllerBase
     {
         private readonly IRecipesService recipesService;
+        private readonly IIngredientsService ingredientsService;
 
-        public RecipesController(IRecipesService recipesService)
+        public RecipesController(IRecipesService recipesService, IIngredientsService ingredientsService)
         {
             this.recipesService = recipesService;
+            this.ingredientsService = ingredientsService;
         }
 
         [HttpGet]
@@ -123,6 +125,30 @@ namespace Api.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpGet]
+        [Route("ingredients")]
+        public async Task<ActionResult<List<IngredientOfRecipeResponseModel>>> GetIngredientsFromRecipes([FromQuery] int[] recipeIds, CancellationToken cancellationToken)
+        {
+            var result = await ingredientsService.GetIngredientsOfRecipesAggregatedAsync(recipeIds, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            var ingredientRecipeDtos = result.Value!;
+
+            var aggregatedIngredients = ingredientRecipeDtos.Select(x => new IngredientOfRecipeResponseModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                UnitOfMeasurement = x.UnitOfMeasurement,
+                Quantity = x.Quantity
+            }).ToList();
+
+            return Ok(aggregatedIngredients);
         }
     }
 }
