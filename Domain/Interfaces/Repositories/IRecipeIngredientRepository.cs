@@ -5,4 +5,6 @@ namespace Domain.Interfaces.Repositories;
 public interface IRecipeIngredientRepository
 {
     Task<RecipeIngredient> AddIngredientRecipeAsync(RecipeIngredient ingredientRecipe, CancellationToken cancellationToken);
+    
+    Task DeleteIngredientRecipeAsync(int recipeId, int ingredientId, CancellationToken cancellationToken);
 }

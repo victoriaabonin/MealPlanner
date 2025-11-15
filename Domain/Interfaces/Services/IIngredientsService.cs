@@ -14,4 +14,5 @@ public interface IIngredientsService
     Task<Result<IngredientDto>> UpdateIngredientAsync(IngredientDto ingredientDto, CancellationToken cancellationToken);
  
     Task<Result<List<IngredientOfRecipeDto>>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds, CancellationToken cancellationToken);
+
 }

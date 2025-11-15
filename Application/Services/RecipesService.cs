@@ -118,4 +118,27 @@ public class RecipesService : IRecipesService
             return Errors.RecipeNotFound;
         }
     }
+
+    public async Task<Result<RecipeDto>> RemoveIngredientFromRecipe(int recipeId, int ingredientId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (recipeId == 0 || ingredientId == 0)
+            {
+                return Errors.MissingPropertyId;
+            }
+
+            await recipeIngredientRepository.DeleteIngredientRecipeAsync(recipeId, ingredientId, cancellationToken);
+
+            var recipe = await recipesRepository.GetRecipeByIdAsync(recipeId, cancellationToken);
+
+            var recipeDto = RecipeMapper.MapToRecipeDto(recipe);
+
+            return recipeDto;
+        }
+        catch (EntityNotFoundException)
+        {
+            return Errors.RecipeIngredientNotFound;
+        }
+    }
 }

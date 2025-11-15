@@ -150,5 +150,19 @@ namespace Api.Controllers
 
             return Ok(aggregatedIngredients);
         }
+
+        [HttpDelete]
+        [Route("ingredients")]
+        public async Task<ActionResult<List<IngredientOfRecipeResponseModel>>> RemoveIngredientsFromRecipe(RemoveIngredientFromRecipeRequestModel requestModel, CancellationToken cancellationToken)
+        {
+            var result = await recipesService.RemoveIngredientFromRecipe(requestModel.RecipeId, requestModel.IngredientId, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            return NoContent();
+        }
     }
 }

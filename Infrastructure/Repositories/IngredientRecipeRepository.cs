@@ -33,4 +33,17 @@ public class IngredientRecipesRepository : IRecipeIngredientRepository
             throw postgresException;
         }
     }
+
+    public async Task DeleteIngredientRecipeAsync(int recipeId, int ingredientId, CancellationToken cancellationToken)
+    {
+        var recipeIngredient = await mealPlannerDbContext.RecipeIngredient.FirstOrDefaultAsync(x => x.IngredientId == ingredientId && x.RecipeId == recipeId, cancellationToken);
+
+        if (recipeIngredient is null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        mealPlannerDbContext.RecipeIngredient.Remove(recipeIngredient);
+        await mealPlannerDbContext.SaveChangesAsync(cancellationToken);
+    }
 }

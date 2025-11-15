@@ -14,4 +14,6 @@ public interface IRecipesService
     Task<Result<RecipeDto>> AddIngredientAsync(AddIngredientToRecipeDto addIngredientToRecipeDto, CancellationToken cancellationToken);
 
     Task<Result<RecipeDto>> UpdateRecipeAsync(RecipeDto recipeDto, CancellationToken cancellationToken);
+
+    Task<Result<RecipeDto>> RemoveIngredientFromRecipe(int recipeId, int ingredientId, CancellationToken cancellationToken);
 }
