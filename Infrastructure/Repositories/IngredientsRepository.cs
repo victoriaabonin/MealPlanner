@@ -81,4 +81,25 @@ public class IngredientsRepository : IIngredientsRepository
 
         return ingredient;
     }
+
+    public async Task DeleteIngredientAsync(int id, CancellationToken cancellationToken)
+    {
+        var existingIngredient = await mealPlannerDbContext.Ingredients.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (existingIngredient is null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        var recipeIngredients = await mealPlannerDbContext.RecipeIngredient.Where(x => x.IngredientId == id).ToListAsync();
+
+        if (recipeIngredients.Any())
+        {
+            throw new EntityHasExistingRelationException();
+        }
+
+        mealPlannerDbContext.Ingredients.Remove(existingIngredient);
+
+        await mealPlannerDbContext.SaveChangesAsync(cancellationToken);
+    }
 }

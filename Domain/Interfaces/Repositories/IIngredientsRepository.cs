@@ -11,4 +11,6 @@ public interface IIngredientsRepository
     Task<Ingredient> AddIngredientAsync(Ingredient ingredient, CancellationToken cancellationToken);
 
     Task<Ingredient> UpdateIngredientAsync(Ingredient ingredient, CancellationToken cancellationToken);
+
+    Task DeleteIngredientAsync(int id, CancellationToken cancellationToken);
 }

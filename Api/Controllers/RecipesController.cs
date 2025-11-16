@@ -155,7 +155,21 @@ namespace Api.Controllers
         [Route("ingredients")]
         public async Task<ActionResult<List<IngredientOfRecipeResponseModel>>> RemoveIngredientsFromRecipe(RemoveIngredientFromRecipeRequestModel requestModel, CancellationToken cancellationToken)
         {
-            var result = await recipesService.RemoveIngredientFromRecipe(requestModel.RecipeId, requestModel.IngredientId, cancellationToken);
+            var result = await recipesService.RemoveIngredientFromRecipeAsync(requestModel.RecipeId, requestModel.IngredientId, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> DeleteRecipe(int id, CancellationToken cancellationToken)
+        {
+            var result = await recipesService.DeleteRecipeAsync(id, cancellationToken);
 
             if (result.IsFailure)
             {

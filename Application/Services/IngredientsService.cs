@@ -130,4 +130,27 @@ public class IngredientsService : IIngredientsService
             return Errors.IngredientNotFound;
         }
     }
+
+    public async Task<Result> DeleteIngredientAsync(int id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (id == 0)
+            {
+                return Errors.MissingPropertyId;
+            }
+
+            await ingredientsRepository.DeleteIngredientAsync(id, cancellationToken);
+
+            return Result.Success();
+        }
+        catch (EntityNotFoundException)
+        {
+            return Errors.IngredientNotFound;
+        }
+        catch (EntityHasExistingRelationException)
+        {
+            return Errors.IngredientHasLinkedRecipes;
+        }
+    }
 }

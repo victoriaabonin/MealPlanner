@@ -119,7 +119,7 @@ public class RecipesService : IRecipesService
         }
     }
 
-    public async Task<Result<RecipeDto>> RemoveIngredientFromRecipe(int recipeId, int ingredientId, CancellationToken cancellationToken)
+    public async Task<Result<RecipeDto>> RemoveIngredientFromRecipeAsync(int recipeId, int ingredientId, CancellationToken cancellationToken)
     {
         try
         {
@@ -139,6 +139,25 @@ public class RecipesService : IRecipesService
         catch (EntityNotFoundException)
         {
             return Errors.RecipeIngredientNotFound;
+        }
+    }
+
+    public async Task<Result> DeleteRecipeAsync(int id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (id == 0)
+            {
+                return Errors.MissingPropertyId;
+            }
+
+            await recipesRepository.DeleteRecipeAsync(id, cancellationToken);
+
+            return Result.Success();
+        }
+        catch (EntityNotFoundException)
+        {
+            return Errors.RecipeNotFound;
         }
     }
 }

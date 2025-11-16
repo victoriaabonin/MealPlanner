@@ -100,5 +100,19 @@ namespace Api.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> DeleteIngredient(int id, CancellationToken cancellationToken)
+        {
+            var result = await ingredientsService.DeleteIngredientAsync(id, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error!.Description);
+            }
+
+            return NoContent();
+        }
     }
 }

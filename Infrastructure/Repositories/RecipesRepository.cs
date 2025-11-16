@@ -91,4 +91,21 @@ public class RecipesRepository : IRecipesRepository
             throw postgresException;
         }
     }
+
+    public async Task DeleteRecipeAsync(int id, CancellationToken cancellationToken)
+    {
+        var existingRecipe = await mealPlannerDbContext.Recipes.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (existingRecipe is null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        var recipeIngredients = await mealPlannerDbContext.RecipeIngredient.Where(x => x.RecipeId == id).ToListAsync();
+
+        mealPlannerDbContext.RecipeIngredient.RemoveRange(recipeIngredients);
+        mealPlannerDbContext.Recipes.Remove(existingRecipe);
+
+        await mealPlannerDbContext.SaveChangesAsync(cancellationToken);
+    }
 }

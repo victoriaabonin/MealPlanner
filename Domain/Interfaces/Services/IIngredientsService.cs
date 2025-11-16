@@ -15,4 +15,6 @@ public interface IIngredientsService
  
     Task<Result<List<IngredientOfRecipeDto>>> GetIngredientsOfRecipesAggregatedAsync(int[] recipeIds, CancellationToken cancellationToken);
 
+    Task<Result> DeleteIngredientAsync(int id, CancellationToken cancellationToken);
+
 }

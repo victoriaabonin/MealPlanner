@@ -13,4 +13,6 @@ public interface IRecipesRepository
     Task<Recipe> AddRecipeAsync(Recipe recipe, CancellationToken cancellationToken);
     
     Task<Recipe> UpdateRecipeAsync(Recipe recipe, CancellationToken cancellationToken);
+
+    Task DeleteRecipeAsync(int id, CancellationToken cancellationToken);
 }
